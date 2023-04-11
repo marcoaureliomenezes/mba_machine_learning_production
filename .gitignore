@@ -1,0 +1,5 @@
+.vscode/
+entregaveis/
+**/outputs/
+**/aulas/
+**/__pycache__/**

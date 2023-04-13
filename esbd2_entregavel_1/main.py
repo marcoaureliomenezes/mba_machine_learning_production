@@ -1,39 +1,31 @@
 from walk_assistent import WalkAssistent
 from router import HighlySafetyRouter, SafetyRouter, accetableRouter
 from graph_generator import Graph
-
+import random
 
 def test_singleton():
     strategy_1 = HighlySafetyRouter()
     strategy_2 = HighlySafetyRouter()
-    print(f"A instância de strategy_1 é a mesma de strategy_4? {strategy_1 == strategy_2}")
+    print(f"The same instance? {strategy_1 is strategy_2}")
 
-def generate_graph():
-    graph = Graph(10, 15)
-    graph.print_graph()
-    return graph
 
 
 if __name__ == '__main__':
 
     # testando o padrão singleton aplicado a classe Router e suas subclasses
-    test_singleton()
+    #test_singleton()
 
-    graph = generate_graph()
-    # print(graph.graph)
-    # source_pos = 'A'
-    # target_pos = 'F'
+    strategy_1, strategy_2, strategy_3 = HighlySafetyRouter(), SafetyRouter(), accetableRouter()
 
+    graph = Graph(10, 20)
+
+
+
+    source_pos, target_pos = random.sample(graph.graph.keys(), 2)
+    router_generator = WalkAssistent(source_pos, target_pos)
+
+
+    safest_path = router_generator.follow_route(strategy_1, graph)
+    safe_path = router_generator.follow_route(strategy_2, graph)
+    fastest_path = router_generator.follow_route(strategy_3, graph)
     
-    # strategy_1, strategy_2, strategy_3 = HighlySafetyRouter(), SafetyRouter(), accetableRouter()
-    # router_generator = WalkAssistent(graph, source_pos, target_pos)
-
-    # router_generator.generate_router(strategy_1)
-    # router_generator.generate_router(strategy_2)
-    # router_generator.generate_router(strategy_3)
-
-
-# Path: ESBD2/entregavel_1/router_generator.py
-
-
-

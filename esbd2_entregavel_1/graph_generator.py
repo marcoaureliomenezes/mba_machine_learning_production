@@ -1,3 +1,4 @@
+from functools import reduce
 from random import randint
 import random
 import uuid
@@ -6,14 +7,15 @@ import uuid
 
 class Location(object):
 
-    def __init__(self, uid, is_safety):
+    def __init__(self, uid, safe_chance):
         self._uid = uid
-        self._is_safety = is_safety
+        self._is_safety = True if random.random() < safe_chance else False
 
     def get_uid(self):
         return self._uid
     
     def get_safety(self):
+
         return self._is_safety
 
 
@@ -52,6 +54,11 @@ class Graph(object):
             graph_aux[location_1_uid][location_2_uid] = True
             graph_aux[location_2_uid][location_1_uid] = True
             conn_num += 1
+
+        # connection_to_remove = []
+        # for location_uid in graph:
+        #     connections = [*map(lambda p: p.get_uid(), graph[location_uid]['connections'])]
+        print(len(graph))
         return graph, graph_aux
 
 
@@ -62,19 +69,33 @@ class Graph(object):
 
         for _ in range(self._num_locations):
             uid = str(uuid.uuid4())[:8]
-            is_safety = bool(randint(0, 1))
-            locations.append(Location(uid, is_safety))
+            locations.append(Location(uid, 0.5))
         graph, graph_aux = self.__generate_connections(locations)
         return graph
         
+
     def get_graph(self):
         return self.graph
 
-    def print_graph(self):
-        my_print = lambda connection: {"location": connection.get_uid(), "is_safe": connection.get_safety()}
+
+    def print_graph(self, all=False):
+        my_print = lambda connection, all: {"location": connection.get_uid(), "is_safe": connection.get_safety()} if all \
+            else {"location": connection.get_uid()}
         for location in self.graph:
-            connections = [my_print(connection) for connection in self.graph[location]['connections']]
+            connections = [my_print(connection, all) for connection in self.graph[location]['connections']]
             location_uid = self.graph[location]['this'].get_uid()
             print("Location: ", location_uid, "Connections: ", connections)
+
+
+
+    def print_evaluate_path(self, path, src, target):
+        if path is None:
+            print("No path found from {} to {}".format(src, target))
+            return
+        print("Path found from {} to {}:".format(src, target))
+        for i in range(len(path)):
+            print(reduce(lambda a, b: f'{a} -> {b}', [[location, self.graph[location]['this'].get_safety()] for location in path]))
+
+
 if __name__ == '__main__': 
     pass

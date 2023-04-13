@@ -1,3 +1,4 @@
+from asyncio import Queue
 import random
 import uuid
 
@@ -76,21 +77,35 @@ class FriendNetwork(object):
                     graph[friend.get_uid()]['friends'])].index(person_props['person_uid'])
                 del graph[friend.get_uid()]['friends'][person_index]
             del graph[person_props['person_uid']]
+        print(len(graph))
         return graph
     
 
     def get_person_by_uid(self, uid):
         return self._graph[uid]['this']
 
-    def _search(self, person_uid, friend_uid):
-        '''
-        TODO
-        
-        Esta função DEVE retornar uma lista com o caminho (incluindo origem e destino)
-        percorrido para encontrar o friend_uid partindo do person_uid
-        '''
+    def _search_generica(self, person_uid, friend_uid):
+        initial_distances = { i: None if i != person_uid else 0 for i in self.graph.keys()}
+        queue, path_list = Queue(), []
+        queue.put(person_uid)
+        while not queue.empty():
+            vertex = queue.get()
+            for neighbor in self.graph[vertex]:
+                if initial_distances[neighbor] is None:
+                    initial_distances[neighbor] = initial_distances[vertex] + 1
+                    path_list.append((vertex, neighbor))
+                    queue.put(neighbor)
+        def generate_path(path_list, src, dst):
+            if dst == src: return [src]
+            last_index = [i for i in path_list if i[1] == dst]
+            return generate_path(path_list, src, last_index[0][0]) + [dst]
+        return generate_path(path_list, person_uid, friend_uid)    
 
         
+
+    def _search(self, person_uid, friend_uid):
+        pass
+    
 
     def get_separation_degree(self):
         total_paths_len = 0

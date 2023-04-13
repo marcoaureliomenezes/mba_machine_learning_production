@@ -1,5 +1,5 @@
 from walk_assistent import WalkAssistent
-from router import HighlySafetyRouter, SafetyRouter, accetableRouter
+from router import HighlySafetyRouter, SafetyRouter, AcceptableRouter
 from graph_generator import Graph
 import random
 
@@ -15,9 +15,9 @@ if __name__ == '__main__':
     # testando o padrão singleton aplicado a classe Router e suas subclasses
     #test_singleton()
 
-    strategy_1, strategy_2, strategy_3 = HighlySafetyRouter(), SafetyRouter(), accetableRouter()
+    strategy_1, strategy_2, strategy_3 = HighlySafetyRouter(), SafetyRouter(), AcceptableRouter()
 
-    graph = Graph(10, 20)
+    graph = Graph(100, 200)
 
 
 

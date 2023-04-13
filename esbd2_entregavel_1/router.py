@@ -23,11 +23,11 @@ class Router(ABC, Singleton):
 
 
     def trace_route(self, graph, source, target) -> List:
-        path = self._compute_specific_path(graph, source, target, self.logic_trace_route)
+        path = self.__compute_specific_path(graph, source, target, self.logic_trace_route)
         return path
    
 
-    def _compute_specific_path(self, graph, source, target, lambda_funct):
+    def __compute_specific_path(self, graph, source, target, lambda_funct):
         initial_distances = { i: None if i != source else 0 for i in graph.graph.keys()}
         fila, path_list = Queue(), []
         fila.put(graph.graph[source]['this'])
@@ -37,7 +37,8 @@ class Router(ABC, Singleton):
             for neighbor in graph.graph[vertex_uid]['connections']:  
                 neighbor_id = neighbor.get_uid()
                 if initial_distances[neighbor_id] is None:
-                    if lambda_funct(neighbor): continue            
+                    cond_neighbor_equals_target = neighbor_id == target
+                    if lambda_funct(neighbor) and not cond_neighbor_equals_target: continue            
                     initial_distances[neighbor_id] = initial_distances[vertex_uid] + 1
                     path_list.append((vertex_uid, neighbor_id))
                     fila.put(neighbor)
@@ -52,10 +53,7 @@ class Router(ABC, Singleton):
         return self.__generate_path(path_list, source, last_index[0][0]) + [dst]
 
 
-
 class HighlySafetyRouter(Router):
-
-
 
     def logic_trace_route(self, neighbor):
         return neighbor.get_safety() != True
@@ -63,15 +61,13 @@ class HighlySafetyRouter(Router):
 
 class SafetyRouter(Router):
 
-
-
     def logic_trace_route(self, neighbor):
         if random.random() < 0.7:
             return neighbor.get_safety() != True
         return False
 
 
-class accetableRouter(Router):
+class AcceptableRouter(Router):
 
     def logic_trace_route(self, neighbor):
         return False

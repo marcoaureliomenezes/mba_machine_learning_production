@@ -1,5 +1,6 @@
 # Repósitório de trabalho do MBA Machine Learning Production
 
+Esse repositório tem por objetivo armazenar de forma pública atividades desenvolvidas durante os estudos do MBA Machine Learning Production.
 
 ## 1 - ESBD1 Entregável 1
 
@@ -30,8 +31,6 @@ Forma de resolução:
 - Diagrama de classe UML
 - Trechos de código (pseudo-código) das partes importantes
 
-<hr>
-
 ### 3.2 - Análise do problema
 
 O problema de geração de rotas apresentado acima pressupõe que existam rotas armazenadas em algum lugar. Em uma modelagem para esses tipos de problema é comum utilizar-se de modelagem em grafos.
@@ -48,8 +47,6 @@ Assim sendo, na implementação de uma simulação do problema e sua solução l
 - Para suportar a implementação de diferentes estratégias, que pelo padrão estrategy estarão implementados em diferentes 3 classes concretas (**HighlySafetyRouter**, **SafetyRouter** e **AcceptableRouter**) e herdam a mesma classe abstrata (Router). estão implementadas no módulo **router.py**. Cada uma das classes concretas possui o método **logic_trace_route** que implementa a lógica que define como os 3 diferentes tipos de roteamento se comportam. Essas 3 lógicas serão exporadas mais a seguir.
 
 - Para atender ao requisito de não sobrecarregar a memória com objetos desnecessários, foi analisado no problema que objetos que correm o risco de serem instanciados várias vezes tem maior probabilidade de vir das classes que definem estratégia. Dessa forma elas foram definidas como singleton.
-
-<hr>
 
 ### 3.3 - Estratégias levantadas que correspondem a rotas “altamente segura”, “segura” e “aceitável”
 

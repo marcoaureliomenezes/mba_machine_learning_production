@@ -79,9 +79,9 @@ O script main.py realiza os seguintes passos:
 
 As implementações das classes podem ser vistas em:
 
-- Classe Graph e classe Location: arquivo esbd2_entregavel_1/graph_generator.py
-- Classe WalkAssistent: arquivo esbd2_entregavel_1/walk_assistent.py
-- Classes Singleton, Router, HiglySafetyRouter, SafetyRouter e AcceptableRouter: arquivo esbd2_entregavel_1/router.py
+- **Classes Graph e Location:** arquivo esbd2_entregavel_1/graph_generator.py
+- **Classe WalkAssistent:** arquivo esbd2_entregavel_1/walk_assistent.py
+- **Classes Singleton, Router, HiglySafetyRouter, SafetyRouter e AcceptableRouter**: arquivo esbd2_entregavel_1/router.py
 
 
 ### **1.6 - Conclusão**

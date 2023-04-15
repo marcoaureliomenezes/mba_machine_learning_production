@@ -47,12 +47,12 @@ class Graph(object):
     def __generate_graph(self):
         locations, graph = [], {}
         for uid in range(self.__num_locations):
-            locations.append(Location(uid, 0.8))
+            locations.append(Location(uid, 0.3))
         graph, graph_aux = self.__generate_connections(locations)
         return graph
 
     # Método para gerar as conexões do grafo
-    def __generate_connections(self, locations):
+    def __generate_connections(self, locations) -> dict:
         conn_num = 0
         graph = {}
         graph_aux = {} # criando um grafo auxiliar para agilizar algumas buscas
@@ -80,7 +80,7 @@ class Graph(object):
         return graph, graph_aux
 
     # Método para imprimir o grafo
-    def print_graph(self, all=False):
+    def print_graph(self):
         for location in self.graph:
             connections = [conn.get_uid() for conn in self.graph[location]['connections']]
             location_uid = self.graph[location]['this'].get_uid()
@@ -102,7 +102,7 @@ class Graph(object):
 
 
     # Método para plotar o grafo
-    def plot_graph(self):
+    def plot_graph(self) -> None:
         graph = self.__simplify_graph_of_objects()
         colors = [graph.nodes[n]['color'] for n in graph.nodes()]
         pos = nx.spring_layout(graph)

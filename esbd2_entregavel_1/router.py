@@ -5,7 +5,7 @@ from queue import Queue
 
 class Singleton(object):
 
-    _instance = None
+    _instance: object = None
 
     def __new__(cls):
         if cls._instance is None:
@@ -20,19 +20,13 @@ class Router(ABC, Singleton):
 
     # Método abstrato para implementar a lógica de roteamento
     @abstractmethod
-    def logic_trace_route(self, graph, source, target) -> List:
+    def trace_route(self, graph, source, target) -> List:
         pass
 
 
-    # Método para calcular o caminho a ser seguido pelo usuário.
-    def trace_route(self, graph, source, target) -> List:
-        path = self.__compute_specific_path(graph, source, target, self.logic_trace_route)
-        return path
-   
-
     # Método privado para calcular o caminho entre dois vértices de um grafo
     # Recebe uma função lambda que define a lógica com que os vizinhos serão visitados
-    def __compute_specific_path(self, graph, source, target, lambda_funct):
+    def _compute_specific_path(self, graph, source, target, lambda_funct):
         graph = graph.get_graph()
         initial_distances = { i: None if i != source else 0 for i in graph.keys()}
         fila, path_list = Queue(), []
@@ -53,33 +47,37 @@ class Router(ABC, Singleton):
 
 
     # Método privado para gerar o caminho a partir da lista de arestas. Usa recursão para gerar o caminho de forma reversa
-    def __generate_path(self, path_list, source, dst):
-        if dst == source: return [source]
-        last_index = [i for i in path_list if i[1] == dst]
+    def __generate_path(self, path_list, source, target):
+        if target == source: return [source]
+        last_index = [i for i in path_list if i[1] == target]
         if last_index == []: return None
-        return self.__generate_path(path_list, source, last_index[0][0]) + [dst]
+        return self.__generate_path(path_list, source, last_index[0][0]) + [target]
 
 
 # Classe para representar um roteador que observa a segurança do caminho em todos os vizinhos. Herda a classe a
 class HighlySafetyRouter(Router):
 
+    # Método para calcular o caminho a ser seguido pelo usuário.
+    def trace_route(self, graph, source, target) -> List:
+        logic_trace_route = lambda neighbor: neighbor.get_safety() != True
+        path = self._compute_specific_path(graph, source, target, logic_trace_route)
+        return path
 
-    def logic_trace_route(self, neighbor):
-        return neighbor.get_safety() != True
 
 # Classe para representar um roteador tem 70% de chance de observar a segurança do caminho ao visitar um vizinho.
 class SafetyRouter(Router):
 
-    def logic_trace_route(self, neighbor):
-        if random.random() < 0.7:
-            return neighbor.get_safety() != True
-        return False
-
+    # Método para calcular o caminho a ser seguido pelo usuário.
+    def trace_route(self, graph, source, target) -> List:
+        logic_trace_route = lambda neighbor: neighbor.get_safety() != True if random.random() < 0.2 else False
+        path = self._compute_specific_path(graph, source, target, logic_trace_route)
+        return path
 
 # Classe para representar um roteador que sempre aceita a rota
 class AcceptableRouter(Router):
 
-    def logic_trace_route(self, neighbor):
-        if random.random() < 0.2:
-            return neighbor.get_safety() != True
-        return False
+    # Método para calcular o caminho a ser seguido pelo usuário.
+    def trace_route(self, graph, source, target) -> List:
+        logic_trace_route = lambda neighbor: neighbor.get_safety() != True if random.random() < 0.2 else False
+        path = self._compute_specific_path(graph, source, target, logic_trace_route)
+        return path

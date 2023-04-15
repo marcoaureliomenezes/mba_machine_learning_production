@@ -1,4 +1,4 @@
-# Repositório de trabalho do MBA Machine Learning Production
+# Repositório MBA Machine Learning Production
 
 Esse repositório tem por objetivo armazenar atividades desenvolvidas durante os estudos do MBA Machine Learning Production.
 

@@ -2,23 +2,11 @@
 
 Esse repositório tem por objetivo armazenar atividades desenvolvidas durante os estudos do MBA Machine Learning Production.
 
-## 1 - ESBD1 Entregável 1
-
-Texto sobre entregável 1 do módulo 1. Exploração de estruturas de dados e análise de performance destas em relação a complexidade para realização de certas operações.
-
-<hr>
-
-## 2 - ESBD1 Entregável 2
-
-Texto sobre entregável 2 do módulo 1. Busca em grafo e análise de passos para encontrar número médio de conexões entre uma rede de pessoas como relacionamento entre si.
-
-<hr>
-
-## 3 - ESBD2 Entregável 1
+## 1 - ESBD2 Entregável 1
 
 Atividade a ser entregue até a data de 15-04-2023, referente ao tema Design Patterns e os padrões Singleton e Strategy.
 
-### **3.1 - Descrição do problema**
+### **1.1 - Descrição do problema**
 
 Suponha um sistema de geração de rotas seguras. O App deve gerar uma rota que se classifica em “altamente segura”, “segura” e “aceitável”. Como a rota deve/pode ser alterada à medida que o pedestre caminha, o sistema deve ser capaz de trocar o nível
 de segurança da rota em tempo de execução. Assim, ora a rota se caracteriza como “altamente segura”, ora como “segura” e ora como “aceitável”.
@@ -31,7 +19,7 @@ Forma de resolução:
 - Diagrama de classe UML.
 - Trechos de código (pseudo-código) das partes importantes.
 
-### **3.2 - Análise do problema**
+### **1.2 - Análise do problema**
 
 O problema de geração de rotas apresentado acima pressupõe a existência de localizações com conexões entre elas. Para esses tipos de problema é comum utilizar-se de modelagem em grafos. Vértices podem ser modelados localidades específicas e arestas seriam conexões entre 2 localizações. Como o problema trabalha com rota de pedestres é plausível considerar que as conexões são bidirecionais.
 
@@ -47,7 +35,7 @@ Na implementação de uma simulação para o problema e sua solução, levantou-
 
 - Para atender ao requisito de não sobrecarregar a memória com objetos desnecessários, foi analisado no problema que objetos que correm o risco de serem instanciados várias vezes tem maior probabilidade de vir das classes que definem estratégia. Dessa forma elas foram definidas como singleton a classe **Router** e consequentemente suas subclasses **HighlySafetyRouter**, **SafetyRouter** e **AcceptableRouter**.
 
-### **3.3 - Estratégias de geração de rota “altamente segura”, “segura” e “aceitável”**
+### **1.3 - Estratégias de geração de rota “altamente segura”, “segura” e “aceitável”**
 
 Como não foi definido o que distingui essas 3 classificações de rota, foi necessário que se estipulasse estratégias que se encaixassem nos termos e pudessem ser implementadas com os recursos disponíveis. Dessa forma foram definidas as seguintes estratégias:
 
@@ -59,14 +47,14 @@ estão marcados como não seguros (atributo is_safe marcado como True).
 - **Rota Aceitável**: Implementa a mesma lógica da rota segura. Porém a chance de verificar a segurança de uma localização no momento que o gerador de rotas está traçando uma rota é de 40%.
 
 
-### **3.4 - Diagrama UML**
+### **1.4 - Diagrama UML**
 
 Segue abaixo uma ilustração do diagrama UML desse conjunto de classes implementado:
 
 ![Figura 2: Diagrama UML](./img/uml_esbd2_1.png)
 
 
-### **3.5 - Implementação**
+### **1.5 - Implementação**
 
 Para executar esse conjunto de classes é preciso executar o seguinte conjunto de instruções:
 

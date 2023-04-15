@@ -76,3 +76,14 @@ O script main.py realiza os seguintes passos:
 - Para as posições de origem e destino são geradas rotas seguindo estratégias definidas nas classes da classe abstrata Router (HighlySafetyRouter, SafetyRouter e AcceptableRouter).
 - As rotas traçadas são printadas.
 - É plotado o grafo de localizações e conexões usando a biblioteca matplotlib.
+
+As implementações das classes podem ser vistas em:
+
+- Classe Graph e classe Location: arquivo esbd2_entregavel_1/graph_generator.py
+- Classe WalkAssistent: arquivo esbd2_entregavel_1/walk_assistent.py
+- Classes Singleton, Router, HiglySafetyRouter, SafetyRouter e AcceptableRouter: arquivo esbd2_entregavel_1/router.py
+
+
+### **1.6 - Conclusão**
+
+No trabalho feito foi possível observar na prática as situações de uso e benefícios de utilizar os padrões Strategy e Singleton. Também foi possível exercitar a confecção de diagramas UML e implementação em python para situação proposta no exercício, agregando bastante conhecimento para o tema.

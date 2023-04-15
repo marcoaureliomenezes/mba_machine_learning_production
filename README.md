@@ -1,6 +1,6 @@
-# Repósitório de trabalho do MBA Machine Learning Production
+# Repsitório de trabalho do MBA Machine Learning Production
 
-Esse repositório tem por objetivo armazenar de forma pública atividades desenvolvidas durante os estudos do MBA Machine Learning Production.
+Esse repositório tem por objetivo armazenar atividades desenvolvidas durante os estudos do MBA Machine Learning Production.
 
 ## 1 - ESBD1 Entregável 1
 
@@ -10,7 +10,7 @@ Texto sobre entregável 1 do módulo 1. Exploração de estruturas de dados e an
 
 ## 2 - ESBD1 Entregável 2
 
-Texto sobre entregável 2 do módulo 1. Busca em grafo e analise de passos para encontrar número médio de conexões entre uma rede de pessoas como relacionamento entre si.
+Texto sobre entregável 2 do módulo 1. Busca em grafo e análise de passos para encontrar número médio de conexões entre uma rede de pessoas como relacionamento entre si.
 
 <hr>
 
@@ -28,25 +28,24 @@ de segurança da rota em tempo de execução. Assim, ora a rota se caracteriza c
 
 Forma de resolução:
 
-- Diagrama de classe UML
-- Trechos de código (pseudo-código) das partes importantes
+- Diagrama de classe UML.
+- Trechos de código (pseudo-código) das partes importantes.
 
 ### **3.2 - Análise do problema**
 
-O problema de geração de rotas apresentado acima pressupõe que existam rotas armazenadas em algum lugar. Em uma modelagem para esses tipos de problema é comum utilizar-se de modelagem em grafos.
-Em uma das modelagens possíveis é possivel atribuir aos vertices localidades específicas e dizer que há conexão entre eles por meio de arestas. Como o problema trabalha com rota de pedestres é plausível considerar que as conexões são bidirecionais.
+O problema de geração de rotas apresentado acima pressupõe a existência de localizações com conexões entre elas. Para esses tipos de problema é comum utilizar-se de modelagem em grafos. Vértices podem ser modelados localidades específicas e arestas seriam conexões entre 2 localizações. Como o problema trabalha com rota de pedestres é plausível considerar que as conexões são bidirecionais.
 
-Assim sendo, na implementação de uma simulação do problema e sua solução levantou-se a hipótese das seguintes entidades:
+Na implementação de uma simulação para o problema e sua solução, levantou-se a hipótese das seguintes entidades:
 
-- Para um problema modelado em grafos, nada mais natural do que a criação de uma classe que represente os grafos. Neste trabalho, essa classe foi denominada **Graph** e está inserida no módulo graph_generator.py.
+- A classe **Graph** inserida no módulo graph_generator.py para representar uma rede de localizações com conexões entre si.
 
-- Para modelagem do grafo como proposto na descrição do problema, faz sentido atribuir aos vértices uma entidade que representa uma localização. Essa localização é composta pelos atributos uid e is_safe, representando o id de uma localidade e se ela é segua ou não. Essa entidade está implementada na atividade por meio da classe **Location**, inserida do módulo graph_generator.py.
+- A classe  **Location** inserida do módulo graph_generator.py. Ela é composta pelos atributos uid e is_safe, representando o id de uma localidade e se ela é segua ou não.
 
-- A aplicação principal foi denominada neste trabalho como assistente de caminhadas está implementada na classe **WalkAssistent**,inserida no módulo **walk_assistent.py**. Em suas atribuições está guardar posições atual e desejada, e traçar uma rota que liga as posições conforme diferentes estratégias. A forma como essas estratégias são implementadas, afim de atender ao requisito de dinamicidade do sistema é com o emprego do padrão de projeto strategy. Esse padrão tem por finalidade aplicar diferentes estratégias para implementar determinada funcionalidade e essas estratégias são implementadas fora da classe.
+- A classe **WalkAssistent**,inserida no módulo **walk_assistent.py**. Entre suas atribuições está guardar posições atual e desejada, e traçar uma rota que liga as posições conforme diferentes estratégias. A forma como essas estratégias são implementadas, afim de atender ao requisito de dinamicidade do sistema, é com o emprego do padrão de projeto strategy. Esse padrão tem por finalidade aplicar diferentes estratégias para implementar determinada funcionalidade e essas estratégias são implementadas fora da classe.
 
-- Para suportar a implementação de diferentes estratégias, que pelo padrão estrategy estarão implementados em diferentes 3 classes concretas (**HighlySafetyRouter**, **SafetyRouter** e **AcceptableRouter**) e herdam a mesma classe abstrata (Router). estão implementadas no módulo **router.py**. Cada uma das classes concretas possui o método **logic_trace_route** que implementa a lógica que define como os 3 diferentes tipos de roteamento se comportam. Essas 3 lógicas serão exporadas mais a seguir.
+- A classe abstrata **Router**. estão implementadas no módulo **router.py** e suas sub-classes concretas **HighlySafetyRouter**, **SafetyRouter** e **AcceptableRouter** para suportar a implementação de diferentes estratégias implementadas no método **trace_route**.
 
-- Para atender ao requisito de não sobrecarregar a memória com objetos desnecessários, foi analisado no problema que objetos que correm o risco de serem instanciados várias vezes tem maior probabilidade de vir das classes que definem estratégia. Dessa forma elas foram definidas como singleton.
+- Para atender ao requisito de não sobrecarregar a memória com objetos desnecessários, foi analisado no problema que objetos que correm o risco de serem instanciados várias vezes tem maior probabilidade de vir das classes que definem estratégia. Dessa forma elas foram definidas como singleton a classe **Router** e consequentemente suas subclasses **HighlySafetyRouter**, **SafetyRouter** e **AcceptableRouter**.
 
 ### **3.3 - Estratégias de geração de rota “altamente segura”, “segura” e “aceitável”**
 

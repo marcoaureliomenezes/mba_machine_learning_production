@@ -41,6 +41,13 @@ class Elevator(Subject):
         self.current_state.emergency_button(self)
 
 
+    # weight sensor method
+    def calculate_velocity(self):
+        self.current_state.weight_sensor(self)
+
+    
+
+
     def maintainance_button(self):
         self.current_state.maintainance_button(self)
 

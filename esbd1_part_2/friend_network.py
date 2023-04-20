@@ -1,4 +1,4 @@
-from asyncio import Queue
+from queue import Queue
 import random
 import uuid
 
@@ -63,7 +63,6 @@ class FriendNetwork(object):
             graph_aux[friend_uid][person_uid] = True
             conn_num += 1
 
-
         people_to_remove = []
         for person_uid in graph:
             friends_types = [*map(lambda p: p.get_s_type(), graph[person_uid]['friends'])]
@@ -77,41 +76,79 @@ class FriendNetwork(object):
                     graph[friend.get_uid()]['friends'])].index(person_props['person_uid'])
                 del graph[friend.get_uid()]['friends'][person_index]
             del graph[person_props['person_uid']]
-        print(len(graph))
         return graph
     
 
     def get_person_by_uid(self, uid):
         return self._graph[uid]['this']
 
-    def _search_generica(self, person_uid, friend_uid):
-        initial_distances = { i: None if i != person_uid else 0 for i in self.graph.keys()}
-        queue, path_list = Queue(), []
-        queue.put(person_uid)
-        while not queue.empty():
-            vertex = queue.get()
-            for neighbor in self.graph[vertex]:
-                if initial_distances[neighbor] is None:
-                    initial_distances[neighbor] = initial_distances[vertex] + 1
-                    path_list.append((vertex, neighbor))
-                    queue.put(neighbor)
-        def generate_path(path_list, src, dst):
-            if dst == src: return [src]
-            last_index = [i for i in path_list if i[1] == dst]
-            return generate_path(path_list, src, last_index[0][0]) + [dst]
-        return generate_path(path_list, person_uid, friend_uid)    
-
         
 
     def _search(self, person_uid, friend_uid):
-        pass
+        graph = self._graph
+        fila = Queue()
+        initial_distances = { i: None if i != person_uid else 0 for i in graph.keys()}
+        fila, path_list =  Queue(), []
+
+        person = graph[person_uid]['this']
+        
+        fila.put(person)
+
+        while not fila.empty():
+            vertex_uid = fila.get().get_uid()
+            if vertex_uid == friend_uid: break
+            for neighbor in graph[vertex_uid]['friends']:  
+                neighbor_id = neighbor.get_uid()
+                if initial_distances[neighbor_id] is None:
+                    initial_distances[neighbor_id] = initial_distances[vertex_uid] + 1
+                    path_list.append((vertex_uid, neighbor_id))
+                    fila.put(neighbor)
+        return self.__generate_path(path_list, person_uid, friend_uid)
+
+    def _alternate_search(self, person_uid, friend_uid):
+        graph = self._graph
+        fila = Queue()
+        initial_distances = { i: None if i != person_uid else 0 for i in graph.keys()}
+        fila, path_list =  Queue(), []
+
+        fila.put(graph[person_uid]['this'])
+        vertex_sex = graph[person_uid]['this'].get_s_type()
+        while not fila.empty():
+            vertex_uid = fila.get().get_uid()
+            if vertex_uid == friend_uid: break
+            for neighbor in graph[vertex_uid]['friends']:  
+                neighbor_id = neighbor.get_uid()
+                neighbor_sex = neighbor.get_s_type()
+                if vertex_sex == neighbor_sex: continue
+                #print(vertex_sex, neighbor_sex)
+                if initial_distances[neighbor_id] is None:
+                    initial_distances[neighbor_id] = initial_distances[vertex_uid] + 1
+                    path_list.append((vertex_uid, neighbor_id))
+                    fila.put(neighbor)
+        return self.__generate_path(path_list, person_uid, friend_uid) if initial_distances[friend_uid] != None else None
+         
+
+    
+    # Método privado para gerar o caminho a partir da lista de arestas. Usa recursão para gerar o caminho de forma reversa
+    def __generate_path(self, path_list, source, target):
+        if target == source: return [source]
+        last_index = [i for i in path_list if i[1] == target]
+        if last_index == []: return None
+        return self.__generate_path(path_list, source, last_index[0][0]) + [target]
+
     
 
-    def get_separation_degree(self):
+    def get_separation_degree(self, alternate=False):
         total_paths_len = 0
-        for _ in range(100):
+        counter = 0
+        while counter < 100:
             person_uid, friend_uid = random.sample([*self._graph.keys()], 2)
-            path = self._search(person_uid, friend_uid)
+            if alternate == False:
+                path = self._search(person_uid, friend_uid)
+            else:
+                path = self._alternate_search(person_uid, friend_uid)
+            if path == None: continue
+            counter += 1
             total_paths_len += len(path) - 1
         return total_paths_len / 100
 

@@ -4,3 +4,4 @@ entregaveis/
 **/aulas/
 **/__pycache__/**
 venv/
+**/output

@@ -32,21 +32,19 @@ class ButtonCallElevator(Subject):
 
 class DoorElevator(Observer):
 
-    previous_len_requests = 0
-    button: ButtonCallElevator = None
+    __previous_len_requests = 0
 
     def __init__(self, floor, button):
         self.floor: int = floor
         self.is_open: bool = False
-        self.button: ButtonCallElevator = button
 
-    def open_door(self):
+    def __open_door(self):
         print(f'PORTA {self.floor} -> ABRINDO...')
         time.sleep(0.5)
         print(f'PORTA {self.floor} == ABERTA!')
         self.is_open = True
 
-    def close_door(self):
+    def __close_door(self):
         print(f'PORTA {self.floor} -> FECHANDO...')
         self.is_open = False
         time.sleep(0.5)
@@ -59,27 +57,27 @@ class DoorElevator(Observer):
     def update(self, subject):
         actual_state_stopped = subject.current_state.__class__.__name__ == 'StoppedState'
         right_floor = subject.current_floor == self.floor
-        reach_a_target_floor = self.previous_len_requests  > len(subject.requested_floors)
+        reach_a_target_floor = self.__previous_len_requests  > len(subject.requested_floors)
     
         #print(actual_state_stopped, right_floor, reach_a_target_floor)
 
        
         if right_floor and actual_state_stopped  and len(subject.requested_floors) == 0:
-            self.open_door(); time.sleep(3)
+            self.__open_door(); time.sleep(3)
             return
 
         if right_floor and actual_state_stopped  and len(subject.requested_floors) > 0 and self.is_open:
             
-            self.close_door(); time.sleep(3)
+            self.__close_door(); time.sleep(3)
             return
 
         if right_floor and actual_state_stopped  and reach_a_target_floor:
-            self.open_door(); time.sleep(3); self.close_door()
+            self.__open_door(); time.sleep(3); self.__close_door()
             return
  
         if right_floor and actual_state_stopped and subject.previous_state == None:
-            self.close_door()
+            self.__close_door()
             return
             
-        self.previous_len_requests = len(subject.requested_floors)
+        self.__previous_len_requests = len(subject.requested_floors)
 

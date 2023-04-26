@@ -1,43 +1,49 @@
 from functools import reduce
-import time
 from typing import List
 from src.elevator import Elevator
-from src.multimidia_center import ControlCenter, MultimidiaElevator
+from src.communication_system import CommunicationSytem
+from src.multimidia_system import MultimidiaSystem
 from src.elevator_door import ButtonCallElevator, DoorElevator
 from abc import ABC, abstractmethod
-
+from src.weight_sensor import WeightSensor
 
 # Classe abstrata que define o contrato para os clientes
-class GenericElevator(ABC):
+class GenericElevadorSystem(ABC):
 
     @abstractmethod
-    def print_information(self) -> str:
+    def run(self) -> str:
+        raise NotImplementedError()
+
+    @abstractmethod
+    def call(self) -> str:
         raise NotImplementedError()
 
 
 # Classe abstrata que define o contrato para as fábricas
-class ElevadorFactory(ABC):
-    def factory_method(self) -> GenericElevator:
+class GenericElevadorSystemFactory(ABC):
+    def factory_method(self) -> GenericElevadorSystem:
         raise NotImplementedError()
 
 
 # Fábrica concreta que cria clientes físicos    
-class ElevadorSystemFactory(ElevadorFactory):
-    def factory_method(self, num_floors) -> GenericElevator:
+class ElevadorSystemFactory(GenericElevadorSystemFactory):
+    def factory_method(self, num_floors) -> GenericElevadorSystem:
         return ElevatorSystem(num_floors)
 
 
-class ElevatorSystem:
+class ElevatorSystem(GenericElevadorSystem):
 
     floor_doors: List[DoorElevator] = []
-    multimidia_device: MultimidiaElevator = None
-    central: ControlCenter = None
+    multimidia_system: MultimidiaSystem = None
+    communication_system: CommunicationSytem = None
     elevator = None
 
     def __init__(self, floors_num: int):
-        self.elevator = Elevator(floors_num)
-        # self.central = ControlCenter()
-        # self.central_multimidia = MultimidiaElevator()
+
+        weight_sensor = WeightSensor()
+        self.elevator = Elevator(floors_num, weight_sensor)
+        self.communication_system = CommunicationSytem()
+        self.multimidia_system = MultimidiaSystem()
 
         for i in range(floors_num + 1):
             button_door_floor = ButtonCallElevator(i)
@@ -46,8 +52,8 @@ class ElevatorSystem:
         self.configure_elevator()
 
     def configure_elevator(self):
-        # self.elevator.attach(self.central)
-        # self.elevator.attach(self.central_multimidia)
+        self.elevator.attach(self.communication_system)
+        self.elevator.attach(self.multimidia_system)
         for door in self.floor_doors:
             self.elevator.attach(door)
 

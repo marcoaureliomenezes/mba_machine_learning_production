@@ -42,8 +42,8 @@ class MovingUpState(ElevatorState):
         required_floors = elevador.requested_floors
         target = min([i for i in required_floors if i >= elevador.current_floor])
         elevador.current_floor += 1
-        elevador.weight_sensor = sum(elevador.weight_dict.values())
-        print(f"{elevador.current_floor - 1} -> {elevador.current_floor}. Peso: {elevador.weight_sensor} Kg")
+        elevador.weight_sensor.set_weight(sum(elevador.weight_dict.values()))
+        print(f"{elevador.current_floor - 1} -> {elevador.current_floor}. Peso: {elevador.weight_sensor.get_weight()} Kg")
         if elevador.current_floor == target:
             elevador.requested_floors.remove(target)
             elevador.previous_state, elevador.current_state = self, StoppedState()
@@ -62,8 +62,8 @@ class MovingDownState(ElevatorState):
         target = max([i for i in elevador.requested_floors if i < elevador.current_floor])
         elevador.current_floor -= 1
         elevador.weight_dict[elevador.current_floor] = 0
-        elevador.weight_sensor = sum(elevador.weight_dict.values())
-        print(f"{elevador.current_floor + 1} -> {elevador.current_floor}. Peso: {elevador.weight_sensor} Kg")
+        elevador.weight_sensor.set_weight(sum(elevador.weight_dict.values()))
+        print(f"{elevador.current_floor + 1} -> {elevador.current_floor}. Peso: {elevador.weight_sensor.get_weight()} Kg")
 
         if elevador.current_floor == target:
             

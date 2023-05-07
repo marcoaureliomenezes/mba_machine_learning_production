@@ -5,12 +5,11 @@ services:
   ventilator:
     build: ./ventilator
     restart: always
-
     ports:
       - 5555:5555
     container_name: ventilator
     volumes:
-      - ./ventilator/src:/app
+      - ./ventilator:/app
     
 
   sink:
@@ -20,16 +19,16 @@ services:
       - 5556:5556
     container_name: sink
     volumes:
-      - ./sink/src:/app
+      - ./sink:/app
 
 
   spawn_worker:
     build: ./workers/
     restart: always
     volumes:
-      - ./workers/src:/app
+      - ./workers:/app
     deploy:
-      replicas: 4
+      replicas: 5
 
 networks:
   default:

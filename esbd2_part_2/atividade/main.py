@@ -12,11 +12,11 @@ if __name__ == "__main__":
         
     #elevator_system_1.run(requested_floors)
 
-    elevator_system_1.elevator.emergency_button()
 
-    # for i in range(5):
-    #     elevator_system_1.call(random.randint(10, num_floors + 1), 0)
-    #     elevator_system_1.run(random.sample(range(0, num_floors), random.randint(1, 3)))
-    #     elevator_system_1.call(random.randint(1, num_floors + 1), 0)
+    for i in range(2):
+        elevator_system_1.call(random.randint(10, num_floors + 1), 0)
+        elevator_system_1.run(random.sample(range(0, num_floors), random.randint(1, 3)))
+        elevator_system_1.call(random.randint(1, num_floors + 1), 0)
 
         
+    elevator_system_1.elevator.emergency_button()

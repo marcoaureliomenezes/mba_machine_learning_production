@@ -5,3 +5,6 @@ entregaveis/
 **/__pycache__/**
 venv/
 **/output
+**/.hypnosis
+**/.vscode
+**/*.sh

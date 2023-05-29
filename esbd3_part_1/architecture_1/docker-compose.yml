@@ -1,0 +1,35 @@
+version: '2.1'
+services:
+  
+
+  ventilator:
+    build: ./ventilator
+    restart: always
+    ports:
+      - 5555:5555
+    container_name: ventilator
+    volumes:
+      - ./ventilator:/app
+    
+
+  sink:
+    build: ./sink
+    restart: always
+    ports:
+      - 5556:5556
+    container_name: sink
+    volumes:
+      - ./sink:/app
+
+
+  spawn_worker:
+    build: ./workers/
+    restart: always
+    volumes:
+      - ./workers:/app
+    deploy:
+      replicas: 5
+
+networks:
+  default:
+    name: queues
